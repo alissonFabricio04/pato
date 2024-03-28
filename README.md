@@ -1,0 +1,1 @@
+Uma rede social voltada para memes.
