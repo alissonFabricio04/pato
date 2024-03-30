@@ -1,5 +1,5 @@
 import SignIn from '../SignIn'
-import { jwtAdapterImpl, signUp, userRepositoryInMemory } from '../../../common/@test/GenUserForTest'
+import { jwtAdapterImpl, signUp, userRepositoryInMemory } from '../../../common/__test__/GenUserForTest'
 
 let signIn: SignIn
 

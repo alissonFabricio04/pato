@@ -1,5 +1,5 @@
 import GetUser from '../GetUser'
-import { signUp, userRepositoryInMemory } from '../../../common/@test/GenUserForTest'
+import { signUp, userRepositoryInMemory } from '../../../common/__test__/GenUserForTest'
 
 let getUser: GetUser
 
