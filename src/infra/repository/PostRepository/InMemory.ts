@@ -2,7 +2,7 @@ import PostRepository from '../../../application/repository/PostRepository'
 import Id from '../../../domain/Id'
 import Post from '../../../domain/Post'
 
-export default class PostRepositoryInMemory implements PostRepository {
+export class PostRepositoryInMemory implements PostRepository {
   posts: Post[] = []
 
   async save(post: Post) {

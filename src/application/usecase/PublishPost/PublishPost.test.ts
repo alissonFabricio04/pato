@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto'
 import PublishPost from '.'
 import { signUp, userRepositoryInMemory } from '../../../common/__test__/GenUserForTest'
-import PostRepositoryInMemory from '../../../infra/repository/PostRepository/InMemory'
+import { PostRepositoryInMemory } from '../../../infra/repository/PostRepository'
 
 let publishPost: PublishPost
 let postRepositoryInMemory: PostRepositoryInMemory
