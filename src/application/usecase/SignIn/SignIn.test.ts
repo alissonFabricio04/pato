@@ -1,17 +1,9 @@
 import SignIn from '../SignIn'
-import SignUp from '../SignUp'
-import JwtAdapterImpl from '../../../infra/adapter/JwtAdapterImpl'
-import { UserRepositoryInMemory } from '../../../infra/repository/UserRepository'
+import { jwtAdapterImpl, signUp, userRepositoryInMemory } from '../../../common/@test/GenUserForTest'
 
-let signUp: SignUp
 let signIn: SignIn
-let userRepositoryInMemory: UserRepositoryInMemory
-let jwtAdapterImpl: JwtAdapterImpl
 
 beforeEach(() => {
-  userRepositoryInMemory = new UserRepositoryInMemory()
-  jwtAdapterImpl = new JwtAdapterImpl()
-  signUp = new SignUp(userRepositoryInMemory)
   signIn = new SignIn(userRepositoryInMemory, jwtAdapterImpl)
 })
 
@@ -29,38 +21,24 @@ test('não deve ser possível fazer login se o usuário não existir', async () 
 })
 
 test('não deve ser possível fazer login se a senha for incorreta', async () => {
-  const inputSignUp = {
-    username: 'wftDeNome',
-    email: 'wftdenome@email.com',
-    password: 'S3nh@MtS3gur@',
-    passwordAgain: 'S3nh@MtS3gur@',
-  }
+  const user = await signUp()
 
-  await signUp.handle(inputSignUp)
-
-  const inputSignIn = {
-    username: 'wftDeNome',
+  const input = {
+    username: user.username,
     password: 'S3nh@MtS3gur@aaaa',
   }
-  await expect(() => signIn.handle(inputSignIn)).rejects.toThrow(
+  await expect(() => signIn.handle(input)).rejects.toThrow(
     'Senha ou username incorreto',
   )
 })
 
 test('deve ser possível fazer login', async () => {
-  const inputSignUp = {
-    username: 'wftDeNome',
-    email: 'wftdenome@email.com',
-    password: 'S3nh@MtS3gur@',
-    passwordAgain: 'S3nh@MtS3gur@',
-  }
+  const user = await signUp()
 
-  await signUp.handle(inputSignUp)
-
-  const inputSignIn = {
-    username: 'wftDeNome',
-    password: 'S3nh@MtS3gur@',
+  const input = {
+    username: user.username,
+    password: user.password,
   }
-  const outputSignIn = await signIn.handle(inputSignIn)
-  expect(outputSignIn.token).toBeDefined()
+  const output = await signIn.handle(input)
+  expect(output.token).toBeDefined()
 })
