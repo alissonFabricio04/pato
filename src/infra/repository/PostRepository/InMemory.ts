@@ -1,11 +1,11 @@
 import PostQuery from '../../../application/query/PostQuery'
-import PostRepository, { RATE } from '../../../application/repository/PostRepository'
+import PostRepository from '../../../application/repository/PostRepository'
 import Id from '../../../domain/Id'
 import Post from '../../../domain/Post'
 
 export class PostRepositoryInMemory implements PostRepository, PostQuery {
   posts: Post[] = []
-  ratedPosts: { userId: Id, postId: Id, rated: RATE }[] = []
+  ratedPosts: { userId: Id, postId: Id, rated: string }[] = []
 
   async save(post: Post) {
     this.posts.push(post)
@@ -27,7 +27,7 @@ export class PostRepositoryInMemory implements PostRepository, PostQuery {
     })
   }
 
-  async rate(userId: Id, post: Post, rate: RATE) {
+  async rate(userId: Id, post: Post, rate: string) {
     const userAlreadyRatedThisPost = this.ratedPosts.find(p => {
       if (p.userId.getValue() === userId.getValue() && p.postId.getValue() === post.postId.getValue()) {
         return p
@@ -62,7 +62,7 @@ export class PostRepositoryInMemory implements PostRepository, PostQuery {
       return undefined
     })
     if (!rate) {
-      return RATE.NOT_REACTED
+      return 'NOT_REACTED'
     }
     return rate.rated
   }
