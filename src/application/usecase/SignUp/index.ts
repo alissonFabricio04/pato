@@ -5,6 +5,7 @@ import User from '../../../domain/User'
 import Username from '../../../domain/Name'
 import { isDeepStrictEqual } from 'node:util'
 import { BadRequest, Conflict } from '../../../common/error'
+import Email from '../../../domain/Email'
 
 type Input = {
   username: string
@@ -31,6 +32,10 @@ export default class SignUp {
       new Username(user.getUsername()),
     )
     if (usernameAlreadyInUse) throw new Conflict('Username já em uso')
+    const emailAlreadyInUse = await this.userRepository.findByEmail(
+      new Email(user.getEmail()),
+    )
+    if (emailAlreadyInUse) throw new Conflict('E-mail já em uso')
     user.activeAccount()
     await this.userRepository.save(user)
     return {
