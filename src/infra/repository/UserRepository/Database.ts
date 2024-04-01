@@ -1,5 +1,3 @@
-/* eslint-disable no-useless-constructor */
-
 import { DataSource, Repository } from 'typeorm'
 import UserRepository from '../../../application/repository/UserRepository'
 import Id from '../../../domain/Id'

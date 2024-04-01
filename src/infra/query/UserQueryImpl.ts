@@ -1,5 +1,3 @@
-/* eslint-disable no-useless-constructor */
-
 import { DataSource, Repository } from 'typeorm'
 import UserEntity from '../database/entity/UserEntity'
 import UserQuery from '../../application/query/UserQuery'
