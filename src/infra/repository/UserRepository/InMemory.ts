@@ -3,6 +3,7 @@ import Id from '../../../domain/Id'
 import Username from '../../../domain/Name'
 import User from '../../../domain/User'
 import UserQuery from '../../../application/query/UserQuery'
+import Email from '../../../domain/Email'
 
 export class UserRepositoryInMemory implements UserRepository, UserQuery {
   users: User[] = []
@@ -22,6 +23,11 @@ export class UserRepositoryInMemory implements UserRepository, UserQuery {
     const user = this.users.find(
       (user) => user.getUsername() === username.getValue(),
     )
+    return user || null
+  }
+
+  async findByEmail(email: Email) {
+    const user = this.users.find((user) => user.getEmail() === email.getValue())
     return user || null
   }
 

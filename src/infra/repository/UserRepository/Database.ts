@@ -7,6 +7,7 @@ import Username from '../../../domain/Name'
 import User from '../../../domain/User'
 import UserEntity from '../../database/entity/UserEntity'
 import { ALGORITHMS_SUPPORTED } from '../../../domain/Password'
+import Email from '../../../domain/Email'
 
 export class UserRepositoryDatabase implements UserRepository {
   private userEntityRepository: Repository<UserEntity>
@@ -59,6 +60,31 @@ export class UserRepositoryDatabase implements UserRepository {
   async findByUsername(username: Username) {
     const userEntity = await this.userEntityRepository.findOneBy({
       username: username.getValue(),
+    })
+    if (!userEntity) return null
+    const [password, salt, algorithm] = userEntity.password.split('!!')
+    let profilePic: { uri: string; mediaType: string } | undefined
+    if (userEntity.profilePictureUri) {
+      profilePic = {
+        uri: userEntity.profilePictureUri,
+        mediaType: userEntity.profilePictureMediaType,
+      }
+    }
+    return User.restore(
+      userEntity.id,
+      userEntity.username,
+      userEntity.email,
+      password,
+      algorithm as ALGORITHMS_SUPPORTED,
+      salt,
+      !userEntity.deletedAt,
+      profilePic,
+    )
+  }
+
+  async findByEmail(email: Email) {
+    const userEntity = await this.userEntityRepository.findOneBy({
+      email: email.getValue(),
     })
     if (!userEntity) return null
     const [password, salt, algorithm] = userEntity.password.split('!!')
