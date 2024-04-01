@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { UserRepositoryDatabase } from '../repository/UserRepository'
+import UserRepositoryDatabase from '../repository/UserRepository/Database'
 import SignUp from '../../application/usecase/SignUp'
 import dataSource from '../database/dataSource'
 
