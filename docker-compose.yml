@@ -2,13 +2,24 @@ version: '3.8'
 
 services:
   postgres:
-    image: postgres:16-alpine
-    restart: always
+    image: postgres:16.2-alpine3.19
+    hostname: postgres
     environment:
-      POSTGRES_DB: ${DATABASE}
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-    ports:
-      - 5432:5432
+      POSTGRES_DB: ${DATABASE}
     volumes:
-      - ./volumes:/var/lib/postgresql/data
+      - ./src/infra/config/postgresql.conf:/docker-entrypoint-initdb.d/postgresql.conf
+    command: postgres -c config_file=/docker-entrypoint-initdb.d/postgresql.conf
+    network_mode: host
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '0.9'
+          memory: '1.4GB'
