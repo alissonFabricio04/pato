@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto'
 import SignUp from '../../application/usecase/SignUp'
-import { UserRepositoryInMemory } from '../../infra/repository/UserRepository'
+import UserRepositoryInMemory from '../../infra/repository/UserRepository/InMemory'
 import { PostRepositoryInMemory } from '../../infra/repository/PostRepository'
 import SignIn from '../../application/usecase/SignIn'
 import JwtAdapterImpl from '../../infra/adapter/JwtAdapterImpl'

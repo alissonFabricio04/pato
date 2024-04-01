@@ -9,7 +9,7 @@ import UserEntity from '../../database/entity/UserEntity'
 import { ALGORITHMS_SUPPORTED } from '../../../domain/Password'
 import Email from '../../../domain/Email'
 
-export class UserRepositoryDatabase implements UserRepository {
+export default class UserRepositoryDatabase implements UserRepository {
   private userEntityRepository: Repository<UserEntity>
   private dataSource: DataSource
 

@@ -5,7 +5,9 @@ import User from '../../../domain/User'
 import UserQuery from '../../../application/query/UserQuery'
 import Email from '../../../domain/Email'
 
-export class UserRepositoryInMemory implements UserRepository, UserQuery {
+export default class UserRepositoryInMemory
+  implements UserRepository, UserQuery
+{
   users: User[] = []
 
   async save(user: User) {
