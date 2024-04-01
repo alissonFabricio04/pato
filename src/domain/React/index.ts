@@ -1,11 +1,17 @@
-import { NotImplemented, UnprocessableEntity } from "../../common/error"
-import Id from "../Id"
-import Post from "../Post"
+/* eslint-disable no-useless-constructor */
+
+import { NotImplemented, UnprocessableEntity } from '../../common/error'
+import Id from '../Id'
+import Post from '../Post'
 
 export default abstract class React {
   abstract state: string
 
-  constructor(readonly id: Id, readonly userId: Id, readonly post: Post) { }
+  constructor(
+    readonly id: Id,
+    readonly userId: Id,
+    readonly post: Post,
+  ) {}
 
   abstract smile(): React
   abstract redSmile(): React
@@ -15,13 +21,17 @@ export default abstract class React {
 enum REACTS_SUPPORTED {
   SMILE = 'SMILE',
   REDSMILE = 'REDSMILE',
-  UNREACTED = 'UNREACTED'
+  UNREACTED = 'UNREACTED',
 }
 
 export class SmileReact implements React {
   state: REACTS_SUPPORTED
 
-  private constructor(readonly userId: Id, readonly post: Post, readonly id: Id = Id.create()) {
+  private constructor(
+    readonly userId: Id,
+    readonly post: Post,
+    readonly id: Id = Id.create(),
+  ) {
     this.state = REACTS_SUPPORTED.SMILE
   }
 
@@ -52,7 +62,11 @@ export class SmileReact implements React {
 export class RedSmileReact implements React {
   state: REACTS_SUPPORTED
 
-  private constructor(readonly userId: Id, readonly post: Post, readonly id: Id = Id.create()) {
+  private constructor(
+    readonly userId: Id,
+    readonly post: Post,
+    readonly id: Id = Id.create(),
+  ) {
     this.state = REACTS_SUPPORTED.REDSMILE
   }
 
@@ -83,7 +97,11 @@ export class RedSmileReact implements React {
 export class UnreactedReact implements React {
   state: REACTS_SUPPORTED
 
-  private constructor(readonly userId: Id, readonly post: Post, readonly id: Id = Id.create()) {
+  private constructor(
+    readonly userId: Id,
+    readonly post: Post,
+    readonly id: Id = Id.create(),
+  ) {
     this.state = REACTS_SUPPORTED.UNREACTED
   }
 
@@ -119,6 +137,10 @@ export class ReactFactory {
   }
 
   static isAReactValid(react: string) {
-    return (react === REACTS_SUPPORTED.SMILE || react === REACTS_SUPPORTED.REDSMILE || react === REACTS_SUPPORTED.UNREACTED)
+    return (
+      react === REACTS_SUPPORTED.SMILE ||
+      react === REACTS_SUPPORTED.REDSMILE ||
+      react === REACTS_SUPPORTED.UNREACTED
+    )
   }
 }

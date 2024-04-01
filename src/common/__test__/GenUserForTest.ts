@@ -1,10 +1,10 @@
-import { randomUUID } from "crypto";
-import SignUp from "../../application/usecase/SignUp";
-import { UserRepositoryInMemory } from "../../infra/repository/UserRepository";
-import { PostRepositoryInMemory } from "../../infra/repository/PostRepository";
-import SignIn from "../../application/usecase/SignIn";
-import JwtAdapterImpl from "../../infra/adapter/JwtAdapterImpl";
-import PublishPost from "../../application/usecase/PublishPost";
+import { randomUUID } from 'crypto'
+import SignUp from '../../application/usecase/SignUp'
+import { UserRepositoryInMemory } from '../../infra/repository/UserRepository'
+import { PostRepositoryInMemory } from '../../infra/repository/PostRepository'
+import SignIn from '../../application/usecase/SignIn'
+import JwtAdapterImpl from '../../infra/adapter/JwtAdapterImpl'
+import PublishPost from '../../application/usecase/PublishPost'
 
 export const userRepositoryInMemory = new UserRepositoryInMemory()
 export const postRepositoryInMemory = new PostRepositoryInMemory()
@@ -25,7 +25,7 @@ export async function signUp() {
   const output = await usecase.handle(input)
   return {
     ...output,
-    ...input
+    ...input,
   }
 }
 
@@ -34,17 +34,20 @@ export async function signIn() {
   const user = await signUp()
   const input = {
     username: user.username,
-    password: user.password
+    password: user.password,
   }
   const output = await usecase.handle(input)
   return {
     ...output,
-    ...input
+    ...input,
   }
 }
 
 export async function publishPost() {
-  const usecase = new PublishPost(postRepositoryInMemory, userRepositoryInMemory)
+  const usecase = new PublishPost(
+    postRepositoryInMemory,
+    userRepositoryInMemory,
+  )
   const user = await signUp()
   const input = {
     authorId: user.userId,
@@ -54,6 +57,6 @@ export async function publishPost() {
   const output = await usecase.handle(input)
   return {
     ...output,
-    ...input
+    ...input,
   }
 }

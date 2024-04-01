@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { expect, test, beforeEach } from 'vitest'
 import Image from '../Image'
 import User from '../User'
 

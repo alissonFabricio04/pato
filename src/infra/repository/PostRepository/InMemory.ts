@@ -5,7 +5,7 @@ import Post from '../../../domain/Post'
 
 export class PostRepositoryInMemory implements PostRepository, PostQuery {
   posts: Post[] = []
-  ratedPosts: { userId: Id, postId: Id, rated: string }[] = []
+  ratedPosts: { userId: Id; postId: Id; rated: string }[] = []
 
   async save(post: Post) {
     this.posts.push(post)
@@ -13,13 +13,13 @@ export class PostRepositoryInMemory implements PostRepository, PostQuery {
 
   async findById(postId: Id) {
     const post = this.posts.find(
-      post => post.postId.getValue() === postId.getValue(),
+      (post) => post.postId.getValue() === postId.getValue(),
     )
     return post || null
   }
 
   async update(post: Post) {
-    this.posts = this.posts.filter(p => {
+    this.posts = this.posts.filter((p) => {
       if (p.postId.getValue() === post.postId.getValue()) {
         return post
       }
@@ -28,24 +28,28 @@ export class PostRepositoryInMemory implements PostRepository, PostQuery {
   }
 
   async rate(userId: Id, post: Post, rate: string) {
-    const userAlreadyRatedThisPost = this.ratedPosts.find(p => {
-      if (p.userId.getValue() === userId.getValue() && p.postId.getValue() === post.postId.getValue()) {
+    const userAlreadyRatedThisPost = this.ratedPosts.find((p) => {
+      if (
+        p.userId.getValue() === userId.getValue() &&
+        p.postId.getValue() === post.postId.getValue()
+      ) {
         return p
       }
+      return undefined
     })
     if (!userAlreadyRatedThisPost) {
       this.ratedPosts.push({
         userId,
         postId: post.postId,
-        rated: rate
+        rated: rate,
       })
       return
     }
-    this.ratedPosts = this.ratedPosts.filter(rat => {
+    this.ratedPosts = this.ratedPosts.filter((rat) => {
       if (rat.postId.getValue() === post.postId.getValue()) {
         return {
           ...rat,
-          reted: rate
+          reted: rate,
         }
       }
       return rat
@@ -53,7 +57,7 @@ export class PostRepositoryInMemory implements PostRepository, PostQuery {
   }
 
   async ratedPost(userId: Id, postId: Id) {
-    const rate = this.ratedPosts.find(rate => {
+    const rate = this.ratedPosts.find((rate) => {
       const itsSameUser = rate.userId.getValue() === userId.getValue()
       const itsSamePost = postId.getValue() === rate.postId.getValue()
       if (itsSameUser && itsSamePost) {
@@ -69,14 +73,14 @@ export class PostRepositoryInMemory implements PostRepository, PostQuery {
 
   async getById(postId: Id) {
     const post = this.posts.find(
-      post => post.postId.getValue() === postId.getValue(),
+      (post) => post.postId.getValue() === postId.getValue(),
     )
     if (!post) return null
     const att: { uri: string; mediaType: string }[] = []
     for (const attachment of post.attachments) {
       att.push({
         uri: attachment.getValue(),
-        mediaType: attachment.getMediaType()
+        mediaType: attachment.getMediaType(),
       })
     }
     return {
@@ -85,7 +89,7 @@ export class PostRepositoryInMemory implements PostRepository, PostQuery {
       body: post.body?.getValue(),
       attachments: att,
       upvotes: post.getVotes(),
-      visibility: post.getVisibility().toString()
+      visibility: post.getVisibility().toString(),
     }
   }
 }

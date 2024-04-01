@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { expect, test } from 'vitest'
 import Post, { VISIBILITY } from '../Post'
 import PostBody from '../PostBody'
 

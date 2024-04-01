@@ -18,7 +18,7 @@ type Output = {
 }
 
 export default class GetPost {
-  constructor(readonly postQuery: PostQuery) { }
+  constructor(readonly postQuery: PostQuery) {}
 
   async handle(input: Input): Promise<Output> {
     const postExists = await this.postQuery.getById(new Id(input.postId))

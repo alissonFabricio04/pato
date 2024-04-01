@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest'
 import Id from '../Id'
 
 test('não deve ser possível criar uma nova instância de "Id" com comprimento do id diferente que 36', () => {

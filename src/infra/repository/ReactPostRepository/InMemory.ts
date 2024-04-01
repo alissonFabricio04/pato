@@ -11,13 +11,13 @@ export class ReactPostRepositoryInMemory implements ReactPostRepository {
 
   async findByPostId(postId: Id) {
     const react = this.reacts.find(
-      react => react.post.postId.getValue() === postId.getValue(),
+      (react) => react.post.postId.getValue() === postId.getValue(),
     )
     return react || null
   }
 
   async update(react: React) {
-    this.reacts = this.reacts.filter(r => {
+    this.reacts = this.reacts.filter((r) => {
       if (r.id.getValue() === react.id.getValue()) {
         return react
       }

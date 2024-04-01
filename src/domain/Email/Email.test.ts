@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { expect, test } from 'vitest'
 import Email from '../Email'
 
 test('não deve ser possível criar uma nova instância de "Email" se o email for inválido', () => {

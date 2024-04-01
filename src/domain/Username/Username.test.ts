@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest'
 import Username from '../Username'
 
 test('não deve ser possível criar nova instância de "Username" se o username não for informado', () => {

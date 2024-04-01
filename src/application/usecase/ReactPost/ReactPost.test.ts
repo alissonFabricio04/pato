@@ -1,9 +1,15 @@
-import ReactPost from "../ReactPost"
-import { postRepositoryInMemory, publishPost, signUp, userRepositoryInMemory } from "../../../common/__test__/GenUserForTest"
-import { ReactPostRepositoryInMemory } from "../../../infra/repository/ReactPostRepository"
-import { UnitOfWorkInMemory } from "../../../infra/repository/UnitOfWork"
-import GetPost from "../GetPost"
-import { randomUUID } from "crypto"
+import { expect, test, beforeEach } from 'vitest'
+import ReactPost from '../ReactPost'
+import {
+  postRepositoryInMemory,
+  publishPost,
+  signUp,
+  userRepositoryInMemory,
+} from '../../../common/__test__/GenUserForTest'
+import { ReactPostRepositoryInMemory } from '../../../infra/repository/ReactPostRepository'
+import { UnitOfWorkInMemory } from '../../../infra/repository/UnitOfWork'
+import GetPost from '../GetPost'
+import { randomUUID } from 'crypto'
 
 let getPost: GetPost
 let reactPost: ReactPost
@@ -18,7 +24,7 @@ beforeEach(() => {
     reactPostRepositoryInMemory,
     postRepositoryInMemory,
     userRepositoryInMemory,
-    unitOfWorkInMemory
+    unitOfWorkInMemory,
   )
 })
 
@@ -28,7 +34,7 @@ test('não deve ser possível dar smile em um post se o post não for encontrado
   const input = {
     userId: user.userId,
     postId: randomUUID(),
-    react: 'smile'
+    react: 'smile',
   }
   await expect(() => reactPost.handle(input)).rejects.toThrow(
     'Conteúdo não encontrado',
@@ -42,7 +48,7 @@ test('deve ser possível dar smile em um post', async () => {
   const input = {
     userId: user.userId,
     postId: post.postId,
-    react: 'smile'
+    react: 'smile',
   }
   await reactPost.handle(input)
   const postUpdated = await getPost.handle({ postId: input.postId })

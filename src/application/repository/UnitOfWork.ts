@@ -1,13 +1,13 @@
 export default abstract class UnitOfWork {
-  protected operations: any[]
+  protected operations: unknown[]
 
   protected constructor() {
     this.operations = []
   }
 
-  async createTransaction(operations: any[]): Promise<void> {
+  async createTransaction(operations: unknown[]): Promise<void> {
     this.operations.push(operations)
   }
 
-  async commit(): Promise<void> { }
+  async commit(): Promise<void> {}
 }

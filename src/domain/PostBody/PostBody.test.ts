@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest'
 import PostBody from '../PostBody'
 
 test('não deve ser possível criar nova instância de "PostBody" se o body não for informado', () => {

@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest'
 import Video from '../Video'
 
 test('não deve ser possível criar uma nova instância de "Video" se o comprimento da uri for menor/igual a 0', () => {

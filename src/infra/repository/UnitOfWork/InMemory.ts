@@ -1,3 +1,5 @@
+/* eslint-disable no-useless-constructor */
+
 import UnitOfWork from '../../../application/repository/UnitOfWork'
 
 export class UnitOfWorkInMemory extends UnitOfWork {

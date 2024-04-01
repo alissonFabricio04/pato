@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest'
 import Image from '../Image'
 
 test('não deve ser possível criar uma nova instância de "Image" se o comprimento da uri for menor/igual a 0', () => {

@@ -19,8 +19,8 @@ export default class ReactPost {
     readonly reactPostRepository: ReactPostRepository,
     readonly postRepository: PostRepository,
     readonly userRepository: UserRepository,
-    readonly unitOfWork: UnitOfWork
-  ) { }
+    readonly unitOfWork: UnitOfWork,
+  ) {}
 
   async handle(input: Input): Promise<void> {
     const reactStrInUpperCase = String(input.react).toUpperCase()
@@ -30,18 +30,17 @@ export default class ReactPost {
     const userId = new Id(input.userId)
     const userExists = await this.userRepository.findById(userId)
     if (!userExists) throw new NotFound('Usuário não encontrado')
-    const reactExists = await this.reactPostRepository.findByPostId(
-      postId,
-    )
+    const reactExists = await this.reactPostRepository.findByPostId(postId)
 
     if (!reactExists) {
-      const react = ReactFactory
-        .create(reactStrInUpperCase)
-        .create(userExists.userId, postExists)
+      const react = ReactFactory.create(reactStrInUpperCase).create(
+        userExists.userId,
+        postExists,
+      )
 
       this.unitOfWork.createTransaction([
         this.postRepository.update(postExists),
-        this.reactPostRepository.save(react)
+        this.reactPostRepository.save(react),
       ])
       return await this.unitOfWork.commit()
     }
@@ -56,7 +55,7 @@ export default class ReactPost {
       }
       this.unitOfWork.createTransaction([
         this.postRepository.update(postExists),
-        this.reactPostRepository.update(reactExists)
+        this.reactPostRepository.update(reactExists),
       ])
       return await this.unitOfWork.commit()
     }

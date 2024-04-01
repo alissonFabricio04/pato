@@ -1,6 +1,12 @@
+import { expect, test, beforeEach } from 'vitest'
 import Id from '../Id'
 import Post from '../Post'
-import { ReactFactory, SmileReact, RedSmileReact, UnreactedReact } from '../React'
+import {
+  ReactFactory,
+  SmileReact,
+  RedSmileReact,
+  UnreactedReact,
+} from '../React'
 
 let post: Post
 let userId: Id
@@ -54,7 +60,9 @@ test('deve ser capaz de criar uma nova instância de "RedSmileReact"', () => {
 
 test('deve ser capaz de restaurar o estado do "RedSmileReact"', () => {
   const react = RedSmileReact.create(userId, post)
-  expect(RedSmileReact.restore(react.id, userId, post)).toBeInstanceOf(RedSmileReact)
+  expect(RedSmileReact.restore(react.id, userId, post)).toBeInstanceOf(
+    RedSmileReact,
+  )
   expect(post.getVotes()).toStrictEqual(-1)
 })
 
@@ -80,7 +88,9 @@ test('deve ser capaz de criar uma nova instância de "UnreactedReact"', () => {
 
 test('deve ser capaz de restaurar o estado do "UnreactedReact"', () => {
   const react = UnreactedReact.create(userId, post)
-  expect(UnreactedReact.restore(react.id, userId, post)).toBeInstanceOf(UnreactedReact)
+  expect(UnreactedReact.restore(react.id, userId, post)).toBeInstanceOf(
+    UnreactedReact,
+  )
   expect(post.getVotes()).toStrictEqual(0)
 })
 
@@ -105,19 +115,25 @@ test('não deve ser capaz de dar um unreacted em um post que você já está unr
 
 // ------------------ Factory ------------------
 test('deve ser capaz de criar uma nova instância de "SmileReact" através da factory', () => {
-  expect(ReactFactory.create("SMILE").create(userId, post)).toBeInstanceOf(SmileReact)
+  expect(ReactFactory.create('SMILE').create(userId, post)).toBeInstanceOf(
+    SmileReact,
+  )
 })
 
 test('deve ser capaz de criar uma nova instância de "RedSmileReact" através da factory', () => {
-  expect(ReactFactory.create("REDSMILE").create(userId, post)).toBeInstanceOf(RedSmileReact)
+  expect(ReactFactory.create('REDSMILE').create(userId, post)).toBeInstanceOf(
+    RedSmileReact,
+  )
 })
 
 test('deve ser capaz de criar uma nova instância de "UnreactedReact" através da factory', () => {
-  expect(ReactFactory.create("UNREACTED").create(userId, post)).toBeInstanceOf(UnreactedReact)
+  expect(ReactFactory.create('UNREACTED').create(userId, post)).toBeInstanceOf(
+    UnreactedReact,
+  )
 })
 
 test('não deve ser possível criar uma nova instância se o método não existir na factory', () => {
-  expect(() => ReactFactory.create("AAAA").create(userId, post)).toThrow(
+  expect(() => ReactFactory.create('AAAA').create(userId, post)).toThrow(
     'Reação invalida',
   )
 })
