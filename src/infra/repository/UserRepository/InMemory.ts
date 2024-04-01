@@ -1,6 +1,6 @@
 import UserRepository from '../../../application/repository/UserRepository'
 import Id from '../../../domain/Id'
-import Username from '../../../domain/Username'
+import Username from '../../../domain/Name'
 import User from '../../../domain/User'
 import UserQuery from '../../../application/query/UserQuery'
 

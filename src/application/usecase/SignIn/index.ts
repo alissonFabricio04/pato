@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-constructor */
 
-import Username from '../../../domain/Username'
+import Username from '../../../domain/Name'
 import { BadRequest, NotFound } from '../../../common/error'
 import JwtAdapter from '../../adapter/JwtAdapter'
 import UserRepository from '../../repository/UserRepository'

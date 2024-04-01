@@ -3,7 +3,7 @@
 import { UnprocessableEntity } from '../../common/error'
 import Id from '../Id'
 import Image from '../Image'
-import Username from '../Username'
+import Username from '../Name'
 import Password, { ALGORITHMS_SUPPORTED, PasswordFactory } from '../Password'
 import Email from '../Email'
 

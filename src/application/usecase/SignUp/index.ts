@@ -2,7 +2,7 @@
 
 import UserRepository from '../../repository/UserRepository'
 import User from '../../../domain/User'
-import Username from '../../../domain/Username'
+import Username from '../../../domain/Name'
 import { isDeepStrictEqual } from 'node:util'
 import { BadRequest, Conflict } from '../../../common/error'
 

@@ -1,5 +1,5 @@
 import Id from '../../domain/Id'
-import Username from '../../domain/Username'
+import Username from '../../domain/Name'
 import User from '../../domain/User'
 
 export default interface UserRepository {
