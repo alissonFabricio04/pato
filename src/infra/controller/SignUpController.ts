@@ -1,5 +1,3 @@
-/* eslint-disable no-useless-constructor */
-
 import { Request, Response } from 'express'
 import { UserRepositoryDatabase } from '../repository/UserRepository'
 import SignUp from '../../application/usecase/SignUp'
