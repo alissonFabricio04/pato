@@ -31,6 +31,7 @@ export default class SignUp {
       new Username(user.getUsername()),
     )
     if (usernameAlreadyInUse) throw new Conflict('Username já em uso')
+    user.activeAccount()
     await this.userRepository.save(user)
     return {
       userId: user.userId.getValue(),
