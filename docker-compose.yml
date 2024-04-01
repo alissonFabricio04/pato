@@ -3,11 +3,13 @@ version: '3.8'
 services:
   postgres:
     image: postgres:16.2-alpine3.19
-    hostname: postgres
+    hostname: ${DATABASE_HOST}
     environment:
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_DB: ${DATABASE}
+    ports:
+      - ${DATABASE_PORT}:${DATABASE_PORT}
     volumes:
       - ./src/infra/config/postgresql.conf:/docker-entrypoint-initdb.d/postgresql.conf
     command: postgres -c config_file=/docker-entrypoint-initdb.d/postgresql.conf
