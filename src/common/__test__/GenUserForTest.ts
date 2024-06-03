@@ -1,13 +1,24 @@
 import { randomUUID } from 'crypto'
 import SignUp from '../../application/usecase/SignUp'
-import UserRepositoryInMemory from '../../infra/repository/UserRepository/InMemory'
-import { PostRepositoryInMemory } from '../../infra/repository/PostRepository'
 import SignIn from '../../application/usecase/SignIn'
+import UserRepositoryDatabase from '../../infra/repository/UserRepository/Database'
+import PostRepositoryDatabase from '../../infra/repository/PostRepository/Database'
+import FolderRepositoryDatabase from '../../infra/repository/FolderRepository/Database'
+import ReactPostRepositoryDatabase from '../../infra/repository/ReactPostRepository/Database'
+import UnitOfWorkDatabase from '../../infra/repository/UnitOfWork/Database'
 import JwtAdapterImpl from '../../infra/adapter/JwtAdapterImpl'
 import PublishPost from '../../application/usecase/PublishPost'
+import CreateFolder from '../../application/usecase/CreateFolder'
+import SavePostInFolder from '../../application/usecase/SavePostInFolder'
+import { connectionDatabase } from '../../infra/database/Connection'
 
-export const userRepositoryInMemory = new UserRepositoryInMemory()
-export const postRepositoryInMemory = new PostRepositoryInMemory()
+export const userRepository = new UserRepositoryDatabase(connectionDatabase)
+export const postRepository = new PostRepositoryDatabase(connectionDatabase)
+export const folderRepository = new FolderRepositoryDatabase(connectionDatabase)
+export const reactPostRepository = new ReactPostRepositoryDatabase(
+  connectionDatabase,
+)
+export const unitOfWork = new UnitOfWorkDatabase(connectionDatabase)
 export const jwtAdapterImpl = new JwtAdapterImpl()
 
 function removeSpecialCharsFromUUID(uuid: string): string {
@@ -15,7 +26,7 @@ function removeSpecialCharsFromUUID(uuid: string): string {
 }
 
 export async function signUp() {
-  const usecase = new SignUp(userRepositoryInMemory)
+  const usecase = new SignUp(userRepository)
   const input = {
     username: `${removeSpecialCharsFromUUID(randomUUID())}`,
     email: `wftdenome.${randomUUID()}@email.com`,
@@ -30,7 +41,7 @@ export async function signUp() {
 }
 
 export async function signIn() {
-  const usecase = new SignIn(userRepositoryInMemory, jwtAdapterImpl)
+  const usecase = new SignIn(userRepository, jwtAdapterImpl)
   const user = await signUp()
   const input = {
     username: user.username,
@@ -44,10 +55,7 @@ export async function signIn() {
 }
 
 export async function publishPost() {
-  const usecase = new PublishPost(
-    postRepositoryInMemory,
-    userRepositoryInMemory,
-  )
+  const usecase = new PublishPost(postRepository, userRepository)
   const user = await signUp()
   const input = {
     authorId: user.userId,
@@ -57,6 +65,41 @@ export async function publishPost() {
   const output = await usecase.handle(input)
   return {
     ...output,
+    ...input,
+  }
+}
+
+export async function createFolder() {
+  const usecase = new CreateFolder(folderRepository, userRepository)
+  const user = await signUp()
+  const input = {
+    name: 'ver mais tarde',
+    ownerId: user.userId,
+  }
+  const output = await usecase.handle(input)
+  return {
+    ...output,
+    ...input,
+  }
+}
+
+export async function savePostInFolder() {
+  const usecase = new SavePostInFolder(
+    folderRepository,
+    postRepository,
+    userRepository,
+  )
+  const folder = await createFolder()
+  const post = await publishPost()
+  const input = {
+    userId: folder.ownerId,
+    folderId: folder.folderId,
+    postId: post.postId,
+  }
+  await usecase.handle(input)
+  return {
+    ...folder,
+    ...post,
     ...input,
   }
 }

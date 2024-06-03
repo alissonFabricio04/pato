@@ -1,14 +1,11 @@
 import { expect, test, beforeEach } from 'vitest'
 import GetUser from '../GetUser'
-import {
-  signUp,
-  userRepositoryInMemory,
-} from '../../../common/__test__/GenUserForTest'
+import { signUp, userRepository } from '../../../common/__test__/GenUserForTest'
 
 let getUser: GetUser
 
 beforeEach(() => {
-  getUser = new GetUser(userRepositoryInMemory)
+  getUser = new GetUser(userRepository)
 })
 
 test('não deve ser possível se buscar um usuário que não existe', async () => {

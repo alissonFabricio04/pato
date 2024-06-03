@@ -5,9 +5,7 @@ import GetUserController from '../controller/GetUser'
 
 const router = express.Router()
 
-router.get('/hello-world', (_, res) =>
-  res.json({ message: 'Hello World!' }).end(),
-)
+router.get('/version', (_, res) => res.json({ version: 'v1' }).end())
 
 router.post('/sign-up', SignUpController)
 router.post('/sign-in', SignInController)

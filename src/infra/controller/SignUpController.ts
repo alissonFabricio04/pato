@@ -1,9 +1,17 @@
 import { Request, Response } from 'express'
-import UserRepositoryDatabase from '../repository/UserRepository/Database'
 import SignUp from '../../application/usecase/SignUp'
-import dataSource from '../database/dataSource'
+import UserRepositoryDatabase from '../repository/UserRepository/Database'
+import dataSource, {
+  connectDatabase,
+  disconnectDatabase,
+} from '../database/dataSource'
+import ErrorHandler from '../ErrorHandler'
 
-async function SignUpController(request: Request, response: Response) {
+export default async function SignUpController(
+  request: Request,
+  response: Response,
+) {
+  await connectDatabase()
   const userRepositoryDatabase = new UserRepositoryDatabase(await dataSource)
   const signUp = new SignUp(userRepositoryDatabase)
   try {
@@ -14,11 +22,12 @@ async function SignUpController(request: Request, response: Response) {
       .json(output)
       .end()
   } catch (e) {
+    const error = e as Error
     return response
-      .status(422)
-      .json({ message: (e as Error).message })
+      .status(ErrorHandler(error.name))
+      .json({ message: error.message })
       .end()
+  } finally {
+    await disconnectDatabase()
   }
 }
-
-export default SignUpController

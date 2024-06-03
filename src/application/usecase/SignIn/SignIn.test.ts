@@ -1,20 +1,21 @@
 import { expect, test, beforeEach } from 'vitest'
 import SignIn from '../SignIn'
 import {
-  jwtAdapterImpl,
   signUp,
-  userRepositoryInMemory,
+  jwtAdapterImpl,
+  userRepository,
 } from '../../../common/__test__/GenUserForTest'
+import { randomUUID } from 'crypto'
 
 let signIn: SignIn
 
 beforeEach(() => {
-  signIn = new SignIn(userRepositoryInMemory, jwtAdapterImpl)
+  signIn = new SignIn(userRepository, jwtAdapterImpl)
 })
 
 test('não deve ser possível fazer login se o usuário não existir', async () => {
   const input = {
-    username: 'wftDeNome',
+    username: `${randomUUID().replace(/[^a-zA-Z0-9]/g, '')}`,
     email: 'wftdenome@email.com',
     password: 'S3nh@MtS3gur@',
     passwordAgain: 'senha diferente',

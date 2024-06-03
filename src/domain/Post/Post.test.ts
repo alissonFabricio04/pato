@@ -13,7 +13,7 @@ const post = {
       mediaType: 'video/mp4',
     },
     {
-      uri: 'https://avatars.githubusercontent.com/u/74628792',
+      uri: 'https://avatars.githubusercontent.com/u/74628792.png',
       mediaType: 'image/png',
     },
   ],
@@ -33,11 +33,12 @@ test('não deve ser possível criar um novo post se o número de anexos excedess
 })
 
 test('não deve ser possível dar upvotes em um post se o número de upvotes for inválido', () => {
+  const attachments = post.attachments.map(({ uri }) => ({ uri }))
   const p = Post.restore(
     '7604aa63-3336-42ae-a7a7-c20db5569a2a',
     post.authorId,
     post.body,
-    post.attachments,
+    attachments,
     Number.MAX_SAFE_INTEGER * Number.MAX_SAFE_INTEGER,
     VISIBILITY.VISIBLE,
   )
@@ -45,11 +46,12 @@ test('não deve ser possível dar upvotes em um post se o número de upvotes for
 })
 
 test('não deve ser possível dar downvote em um post se o número de downvote for inválido', () => {
+  const attachments = post.attachments.map(({ uri }) => ({ uri }))
   const p = Post.restore(
     '7604aa63-3336-42ae-a7a7-c20db5569a2a',
     post.authorId,
     post.body,
-    post.attachments,
+    attachments,
     Number.MAX_SAFE_INTEGER * Number.MAX_SAFE_INTEGER,
     VISIBILITY.VISIBLE,
   )
@@ -116,18 +118,14 @@ test('deve ser possível mudar a visibilidade do post', () => {
 
 test('deve ser possível restaurar o estado do post', () => {
   const p = Post.create(post.authorId, post.body, post.attachments)
-  const att = p.attachments.map((att) => {
-    return {
-      uri: att.getValue(),
-      mediaType: att.getMediaType(),
-    }
-  })
+  const attachments = p.attachments.map((att) => ({ uri: att.getValue() }))
+
   expect(
     Post.restore(
       p.postId.getValue(),
       p.authorId.getValue(),
       p.body?.getValue(),
-      att,
+      attachments,
       p.getVotes(),
       p.getVisibility(),
     ),

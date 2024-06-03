@@ -29,23 +29,25 @@ export default class User {
     this.isActive = false
   }
 
-  changePassword(password: string) {
+  async changePassword(password: string) {
     if (!this.isActive) {
       throw new UnprocessableEntity(
         'Para alterar a senha, sua conta deve estar ativa',
       )
     }
-    this.password = PasswordFactory.create(ALGORITHMS_SUPPORTED.PBKDF2).create(
-      password,
-    )
+    this.password = await PasswordFactory.create(
+      ALGORITHMS_SUPPORTED.BCRYPT,
+    ).create(password)
   }
 
-  static create(username: string, email: string, password: string) {
+  static async create(username: string, email: string, password: string) {
     return new User(
       Id.create(),
       new Username(username),
       new Email(email),
-      PasswordFactory.create(ALGORITHMS_SUPPORTED.PBKDF2).create(password),
+      await PasswordFactory.create(ALGORITHMS_SUPPORTED.BCRYPT).create(
+        password,
+      ),
     )
   }
 
@@ -54,21 +56,19 @@ export default class User {
     username: string,
     email: string,
     password: string,
-    passwordAlgorithm: ALGORITHMS_SUPPORTED,
-    salt: string,
     isActive: boolean,
-    profilePicture?: {
-      uri: string
-      mediaType: string
-    },
+    profilePictureUri?: string,
   ) {
-    if (profilePicture) {
+    if (profilePictureUri) {
+      const extension = profilePictureUri.split(/\./).pop()
+      const mediaType = `image/${extension}`
+
       return new User(
         new Id(userId),
         new Username(username),
         new Email(email),
-        PasswordFactory.create(passwordAlgorithm).restore(password, salt),
-        new Image(profilePicture.uri, profilePicture.mediaType),
+        PasswordFactory.create(ALGORITHMS_SUPPORTED.BCRYPT).restore(password),
+        new Image(profilePictureUri, mediaType),
         isActive,
       )
     }
@@ -76,7 +76,7 @@ export default class User {
       new Id(userId),
       new Username(username),
       new Email(email),
-      PasswordFactory.create(passwordAlgorithm).restore(password, salt),
+      PasswordFactory.create(ALGORITHMS_SUPPORTED.BCRYPT).restore(password),
       undefined,
       isActive,
     )

@@ -25,7 +25,9 @@ export default class SignIn {
       new Username(input.username),
     )
     if (!userExists) throw new NotFound('Username ou senha inválidos')
-    const passwordsIsEqual = userExists.getPassword().validate(input.password)
+    const passwordsIsEqual = await userExists
+      .getPassword()
+      .validate(input.password)
     if (!passwordsIsEqual) throw new BadRequest('Senha ou username incorreto')
     const userId = userExists.userId
     const token = this.jwtAdapter.sign({ userId: userId.getValue() })

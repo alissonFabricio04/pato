@@ -4,8 +4,14 @@ import { NotImplemented, UnprocessableEntity } from '../../common/error'
 import Id from '../Id'
 import Post from '../Post'
 
+enum REACTS_SUPPORTED {
+  SMILE = 'SMILE',
+  REDSMILE = 'REDSMILE',
+  UNREACTED = 'UNREACTED',
+}
+
 export default abstract class React {
-  abstract state: string
+  abstract state: REACTS_SUPPORTED
 
   constructor(
     readonly id: Id,
@@ -16,12 +22,6 @@ export default abstract class React {
   abstract smile(): React
   abstract redSmile(): React
   abstract unreacted(): React
-}
-
-enum REACTS_SUPPORTED {
-  SMILE = 'SMILE',
-  REDSMILE = 'REDSMILE',
-  UNREACTED = 'UNREACTED',
 }
 
 export class SmileReact implements React {

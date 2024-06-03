@@ -1,10 +1,10 @@
 /* eslint-disable no-useless-escape */
 
-import crypto from 'node:crypto'
+import bcrypt from 'bcrypt'
 import { NotImplemented, UnprocessableEntity } from '../../common/error'
 
 export enum ALGORITHMS_SUPPORTED {
-  PBKDF2 = 'PBKDF2',
+  BCRYPT = 'BCRYPT',
 }
 
 function isAGoodPassword(password: string): boolean {
@@ -43,45 +43,36 @@ function isAGoodPassword(password: string): boolean {
 
 export default interface Password {
   value: string
-  salt: string
   algorithm: ALGORITHMS_SUPPORTED
-  validate(password: string): boolean
+  validate(password: string): Promise<boolean>
 }
 
-export class PBKDF2Password implements Password {
+export class BCRYPTPassword implements Password {
   algorithm: ALGORITHMS_SUPPORTED
 
-  private constructor(
-    readonly value: string,
-    readonly salt: string,
-  ) {
-    this.algorithm = ALGORITHMS_SUPPORTED.PBKDF2
+  private constructor(readonly value: string) {
+    this.algorithm = ALGORITHMS_SUPPORTED.BCRYPT
   }
 
-  static create(password: string) {
+  static async create(password: string) {
     isAGoodPassword(password)
-    const salt = crypto.randomBytes(20).toString('hex')
-    const value = crypto
-      .pbkdf2Sync(password, salt, 100, 64, 'sha512')
-      .toString('hex')
-    return new PBKDF2Password(value, salt)
+    const saltRounds = 10
+    const hash = await bcrypt.hash(password, saltRounds)
+    return new BCRYPTPassword(hash)
   }
 
-  static restore(password: string, salt: string) {
-    return new PBKDF2Password(password, salt)
+  static restore(password: string) {
+    return new BCRYPTPassword(password)
   }
 
-  validate(password: string): boolean {
-    const value = crypto
-      .pbkdf2Sync(password, this.salt, 100, 64, 'sha512')
-      .toString('hex')
-    return this.value === value
+  async validate(password: string) {
+    return await bcrypt.compare(password, this.value)
   }
 }
 
 export class PasswordFactory {
   static create(algorithm: ALGORITHMS_SUPPORTED) {
-    if (algorithm === ALGORITHMS_SUPPORTED.PBKDF2) return PBKDF2Password
+    if (algorithm === ALGORITHMS_SUPPORTED.BCRYPT) return BCRYPTPassword
     throw new NotImplemented('Criptografia não conhecida')
   }
 }

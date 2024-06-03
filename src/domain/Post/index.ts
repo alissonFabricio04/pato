@@ -28,14 +28,23 @@ export default class Post {
   }
 
   static instanceAttachments(
-    attachments: { uri: string; mediaType: string }[],
+    attachments: { uri: string; mediaType?: string }[],
   ) {
     const attachs: (Image | Video)[] = []
     for (const attach of attachments) {
-      if (attach.mediaType.includes('video')) {
-        attachs.push(new Video(attach.uri, attach.mediaType))
+      if (attach.mediaType) {
+        if (attach.mediaType.includes('video')) {
+          attachs.push(new Video(attach.uri, attach.mediaType))
+        } else {
+          attachs.push(new Image(attach.uri, attach.mediaType))
+        }
       } else {
-        attachs.push(new Image(attach.uri, attach.mediaType))
+        const extension = attach.uri.split(/\./).pop()
+        if (Image.extensionsSupported.includes(`image/${extension}`)) {
+          attachs.push(new Image(attach.uri, `image/${extension}`))
+        } else {
+          attachs.push(new Video(attach.uri, `video/${extension}`))
+        }
       }
     }
     return attachs
@@ -74,7 +83,7 @@ export default class Post {
     postId: string,
     authorId: string,
     body: string | undefined,
-    attachments: { uri: string; mediaType: string }[],
+    attachments: { uri: string }[],
     upvotes: number,
     visibility: VISIBILITY,
   ) {

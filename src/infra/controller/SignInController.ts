@@ -1,10 +1,18 @@
 import { Request, Response } from 'express'
-import UserRepositoryDatabase from '../repository/UserRepository/Database'
 import SignIn from '../../application/usecase/SignIn'
-import dataSource from '../database/dataSource'
+import UserRepositoryDatabase from '../repository/UserRepository/Database'
+import dataSource, {
+  connectDatabase,
+  disconnectDatabase,
+} from '../database/dataSource'
 import JwtAdapterImpl from '../adapter/JwtAdapterImpl'
+import ErrorHandler from '../ErrorHandler'
 
-async function SignInController(request: Request, response: Response) {
+export default async function SignInController(
+  request: Request,
+  response: Response,
+) {
+  await connectDatabase()
   const userRepositoryDatabase = new UserRepositoryDatabase(await dataSource)
   const jwtAdapterImpl = new JwtAdapterImpl()
   const signIn = new SignIn(userRepositoryDatabase, jwtAdapterImpl)
@@ -12,11 +20,12 @@ async function SignInController(request: Request, response: Response) {
     const output = await signIn.handle(request.body)
     return response.status(200).json(output).end()
   } catch (e) {
+    const error = e as Error
     return response
-      .status(422)
-      .json({ message: (e as Error).message })
+      .status(ErrorHandler(error.name))
+      .json({ message: error.message })
       .end()
+  } finally {
+    await disconnectDatabase()
   }
 }
-
-export default SignInController

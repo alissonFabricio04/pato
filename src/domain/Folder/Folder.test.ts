@@ -41,10 +41,12 @@ test('deve ser possível restaurar o estado de uma pasta', () => {
 test('deve ser possível restaurar o estado de uma pasta com thumbnail', () => {
   const f = Folder.create(folder.name, folder.ownerId)
   expect(
-    Folder.restore(f.folderId.getValue(), f.getName(), f.ownerId.getValue(), {
-      uri: 'https://avatars.githubusercontent.com/u/74628792',
-      mediaType: 'image/png',
-    }),
+    Folder.restore(
+      f.folderId.getValue(),
+      f.getName(),
+      f.ownerId.getValue(),
+      'https://avatars.githubusercontent.com/u/74628792.png',
+    ),
   ).toBeInstanceOf(Folder)
 })
 

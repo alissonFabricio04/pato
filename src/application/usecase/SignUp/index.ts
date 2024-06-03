@@ -27,7 +27,7 @@ export default class SignUp {
     if (!isDeepStrictEqual(input.password, input.passwordAgain)) {
       throw new BadRequest('Senhas se diferem')
     }
-    const user = User.create(input.username, input.email, input.password)
+    const user = await User.create(input.username, input.email, input.password)
     const usernameAlreadyInUse = await this.userRepository.findByUsername(
       new Username(user.getUsername()),
     )

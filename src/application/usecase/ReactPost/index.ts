@@ -30,7 +30,10 @@ export default class ReactPost {
     const userId = new Id(input.userId)
     const userExists = await this.userRepository.findById(userId)
     if (!userExists) throw new NotFound('Usuário não encontrado')
-    const reactExists = await this.reactPostRepository.findByPostId(postId)
+    const reactExists = await this.reactPostRepository.findByPostId(
+      postId,
+      userId,
+    )
 
     if (!reactExists) {
       const react = ReactFactory.create(reactStrInUpperCase).create(
@@ -48,16 +51,29 @@ export default class ReactPost {
     if (ReactFactory.isAReactValid(reactStrInUpperCase)) {
       if (input.react === 'SMILE') {
         reactExists.smile()
+
+        this.unitOfWork.createTransaction([
+          this.postRepository.update(postExists),
+          this.reactPostRepository.update(reactExists),
+        ])
+        return await this.unitOfWork.commit()
       } else if (input.react === 'REDSMILE') {
         reactExists.redSmile()
+
+        this.unitOfWork.createTransaction([
+          this.postRepository.update(postExists),
+          this.reactPostRepository.update(reactExists),
+        ])
+        return await this.unitOfWork.commit()
       } else {
         reactExists.unreacted()
+
+        this.unitOfWork.createTransaction([
+          this.postRepository.update(postExists),
+          this.reactPostRepository.delete(reactExists.id),
+        ])
+        return await this.unitOfWork.commit()
       }
-      this.unitOfWork.createTransaction([
-        this.postRepository.update(postExists),
-        this.reactPostRepository.update(reactExists),
-      ])
-      return await this.unitOfWork.commit()
     }
 
     throw new NotImplemented('Reação invalida')

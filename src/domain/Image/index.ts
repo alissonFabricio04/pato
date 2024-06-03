@@ -3,7 +3,7 @@ import { UnprocessableEntity } from '../../common/error'
 export default class Image {
   private value: string
   private mediaType: string
-  private extensionsSupported = [
+  static extensionsSupported = [
     'image/gif',
     'image/jpeg',
     'image/webp',
@@ -17,7 +17,7 @@ export default class Image {
     if (
       !mediaType ||
       mediaType.length <= 0 ||
-      !this.extensionsSupported.includes(mediaType)
+      !Image.extensionsSupported.includes(mediaType)
     ) {
       throw new UnprocessableEntity('Extensão de arquivo não suportada')
     }

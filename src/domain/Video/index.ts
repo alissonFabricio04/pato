@@ -3,7 +3,7 @@ import { UnprocessableEntity } from '../../common/error'
 export default class Video {
   private value: string
   private mediaType: string
-  private extensionsSupported = ['video/mp4']
+  static extensionsSupported = ['video/mp4']
 
   constructor(uri: string, mediaType: string) {
     if (!uri || uri.length <= 0 || uri.length >= 100) {
@@ -12,7 +12,7 @@ export default class Video {
     if (
       !mediaType ||
       mediaType.length <= 0 ||
-      !this.extensionsSupported.includes(mediaType)
+      !Video.extensionsSupported.includes(mediaType)
     ) {
       throw new UnprocessableEntity('Extensão de arquivo não suportada')
     }

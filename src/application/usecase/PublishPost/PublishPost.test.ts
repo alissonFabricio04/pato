@@ -3,16 +3,14 @@ import { randomUUID } from 'crypto'
 import PublishPost from '../PublishPost'
 import {
   signUp,
-  userRepositoryInMemory,
+  userRepository,
+  postRepository,
 } from '../../../common/__test__/GenUserForTest'
-import { PostRepositoryInMemory } from '../../../infra/repository/PostRepository'
 
 let publishPost: PublishPost
-let postRepositoryInMemory: PostRepositoryInMemory
 
 beforeEach(() => {
-  postRepositoryInMemory = new PostRepositoryInMemory()
-  publishPost = new PublishPost(postRepositoryInMemory, userRepositoryInMemory)
+  publishPost = new PublishPost(postRepository, userRepository)
 })
 
 test('não deve ser possível publicar um post se o autor não existir', async () => {

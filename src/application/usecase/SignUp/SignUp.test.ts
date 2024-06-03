@@ -1,22 +1,21 @@
 import { expect, test, beforeEach } from 'vitest'
 import SignUp from '../SignUp'
 import GetUser from '../GetUser'
-import UserRepositoryInMemory from '../../../infra/repository/UserRepository/InMemory'
+import { userRepository } from '../../../common/__test__/GenUserForTest'
+import { randomUUID } from 'crypto'
 
 let signUp: SignUp
 let getUser: GetUser
-let userRepositoryInMemory: UserRepositoryInMemory
 
 beforeEach(() => {
-  userRepositoryInMemory = new UserRepositoryInMemory()
-  signUp = new SignUp(userRepositoryInMemory)
-  getUser = new GetUser(userRepositoryInMemory)
+  signUp = new SignUp(userRepository)
+  getUser = new GetUser(userRepository)
 })
 
 test('não deve ser possível se cadastrar se as senhas não forem iguais', async () => {
   const input = {
-    username: 'wftDeNome',
-    email: 'wftdenome@email.com',
+    username: `${randomUUID().replace(/[^a-zA-Z0-9]/g, '')}`,
+    email: `${randomUUID().replace(/[^a-zA-Z0-9]/g, '')}@email.com`,
     password: 'S3nh@MtS3gur@',
     passwordAgain: 'senha diferente',
   }
@@ -26,8 +25,8 @@ test('não deve ser possível se cadastrar se as senhas não forem iguais', asyn
 
 test('não deve ser possível se cadastrar se o username já estiver em uso', async () => {
   const input = {
-    username: 'wftDeNome',
-    email: 'wftdenome@email.com',
+    username: `${randomUUID().replace(/[^a-zA-Z0-9]/g, '')}`,
+    email: `${randomUUID().replace(/[^a-zA-Z0-9]/g, '')}@email.com`,
     password: 'S3nh@MtS3gur@',
     passwordAgain: 'S3nh@MtS3gur@',
   }
@@ -39,8 +38,8 @@ test('não deve ser possível se cadastrar se o username já estiver em uso', as
 
 test('deve ser possível se cadastrar', async () => {
   const input = {
-    username: 'wftDeNome',
-    email: 'wftdenome@email.com',
+    username: `${randomUUID().replace(/[^a-zA-Z0-9]/g, '')}`,
+    email: `${randomUUID().replace(/[^a-zA-Z0-9]/g, '')}@email.com`,
     password: 'S3nh@MtS3gur@',
     passwordAgain: 'S3nh@MtS3gur@',
   }

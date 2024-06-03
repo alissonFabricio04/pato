@@ -12,6 +12,15 @@ export default class Folder {
     private thumbnail: Image | undefined,
   ) {}
 
+  static instanceAttachments(attachment: { uri: string; mediaType?: string }) {
+    if (attachment.mediaType) {
+      return new Image(attachment.uri, attachment.mediaType)
+    } else {
+      const extension = attachment.uri.split(/\./).pop()
+      return new Image(attachment.uri, `image/${extension}`)
+    }
+  }
+
   static create(
     name: string,
     ownerId: string,
@@ -32,9 +41,9 @@ export default class Folder {
     folderId: string,
     name: string,
     ownerId: string,
-    thumbnail?: { uri: string; mediaType: string },
+    thumbnailUri?: string,
   ) {
-    if (!thumbnail) {
+    if (!thumbnailUri) {
       return new Folder(
         new Id(folderId),
         new Name(name),
@@ -46,7 +55,7 @@ export default class Folder {
       new Id(folderId),
       new Name(name),
       new Id(ownerId),
-      new Image(thumbnail.uri, thumbnail.mediaType),
+      Folder.instanceAttachments({ uri: thumbnailUri }),
     )
   }
 

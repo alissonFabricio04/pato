@@ -1,30 +1,26 @@
 import { expect, test, beforeEach } from 'vitest'
 import ReactPost from '../ReactPost'
 import {
-  postRepositoryInMemory,
   publishPost,
   signUp,
-  userRepositoryInMemory,
+  unitOfWork,
+  postRepository,
+  userRepository,
+  reactPostRepository,
 } from '../../../common/__test__/GenUserForTest'
-import { ReactPostRepositoryInMemory } from '../../../infra/repository/ReactPostRepository'
-import { UnitOfWorkInMemory } from '../../../infra/repository/UnitOfWork'
 import GetPost from '../GetPost'
 import { randomUUID } from 'crypto'
 
 let getPost: GetPost
 let reactPost: ReactPost
-let reactPostRepositoryInMemory: ReactPostRepositoryInMemory
-let unitOfWorkInMemory: UnitOfWorkInMemory
 
 beforeEach(() => {
-  reactPostRepositoryInMemory = new ReactPostRepositoryInMemory()
-  unitOfWorkInMemory = new UnitOfWorkInMemory()
-  getPost = new GetPost(postRepositoryInMemory)
+  getPost = new GetPost(postRepository)
   reactPost = new ReactPost(
-    reactPostRepositoryInMemory,
-    postRepositoryInMemory,
-    userRepositoryInMemory,
-    unitOfWorkInMemory,
+    reactPostRepository,
+    postRepository,
+    userRepository,
+    unitOfWork,
   )
 })
 

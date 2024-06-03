@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+model User {
+  id                  String    @id @default(uuid())
+  username            String    @unique @db.VarChar(40)
+  email               String    @unique @db.VarChar(254)
+  password            String
+  profile_picture_uri String?
+  created_at          DateTime  @default(now())
+  deleted_at          DateTime?
+
+  Post      Post[]
+  ReactPost ReactPost[]
+  Folder    Folder[]
+
+  @@map("users")
+}
+
+enum VISIBILITY {
+  HIDDEN
+  VISIBLE
+}
+
+model Post {
+  id           String     @id @default(uuid())
+  fk_author_id String
+  body         String?
+  upvotes      Int
+  visibility   VISIBILITY
+
+  User             User               @relation(fields: [fk_author_id], references: [id])
+  Post_attachments Post_attachments[]
+  ReactPost        ReactPost[]
+  SavedPosts       SavedPosts[]
+
+  @@map("posts")
+}
+
+model Post_attachments {
+  id         String @id @default(uuid())
+  fk_post_id String
+  uri        String
+
+  Post Post @relation(fields: [fk_post_id], references: [id])
+
+  @@map("post_attachments")
+}
+
+enum REACT {
+  SMILE
+  REDSMILE
+  UNREACTED
+}
+
+model ReactPost {
+  id         String   @id @default(uuid())
+  fk_user_id String
+  fk_post_id String
+  react      REACT
+  created_at DateTime @default(now())
+
+  User User @relation(fields: [fk_user_id], references: [id])
+  Post Post @relation(fields: [fk_post_id], references: [id])
+
+  @@map("react_post")
+}
+
+model Folder {
+  id          String  @id @default(uuid())
+  name        String  @db.VarChar(40)
+  fk_owner_id String
+  thumbnail   String?
+
+  User       User         @relation(fields: [fk_owner_id], references: [id])
+  SavedPosts SavedPosts[]
+
+  @@map("folder")
+}
+
+model SavedPosts {
+  id           String @id @default(uuid())
+  fk_folder_id String
+  fk_post_id   String
+
+  Folder Folder @relation(fields: [fk_folder_id], references: [id])
+  Post   Post   @relation(fields: [fk_post_id], references: [id])
+
+  @@map("saved_posts")
+}
