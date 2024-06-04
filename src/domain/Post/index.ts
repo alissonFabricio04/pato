@@ -1,7 +1,7 @@
 import { UnprocessableEntity } from '../../common/error'
 import Id from '../Id'
 import Image from '../Image'
-import PostBody from '../PostBody'
+import Body from '../Body'
 import Video from '../Video'
 
 export enum VISIBILITY {
@@ -15,7 +15,7 @@ export default class Post {
   private constructor(
     readonly postId: Id,
     readonly authorId: Id,
-    readonly body: PostBody | undefined,
+    readonly body: Body | undefined,
     readonly attachments: (Image | Video)[],
     private upvotes: number,
     visibility?: VISIBILITY,
@@ -63,7 +63,7 @@ export default class Post {
       return new Post(
         Id.create(),
         new Id(authorId),
-        new PostBody(body),
+        new Body(body),
         this.instanceAttachments(attachments),
         0,
         VISIBILITY.VISIBLE,
@@ -91,7 +91,7 @@ export default class Post {
       return new Post(
         new Id(postId),
         new Id(authorId),
-        new PostBody(body),
+        new Body(body),
         this.instanceAttachments(attachments),
         upvotes,
         visibility,

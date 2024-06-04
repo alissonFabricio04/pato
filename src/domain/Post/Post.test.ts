@@ -2,7 +2,7 @@
 
 import { expect, test } from 'vitest'
 import Post, { VISIBILITY } from '../Post'
-import PostBody from '../PostBody'
+import Body from '../Body'
 
 const post = {
   authorId: '5d86c647-3265-4cf4-babb-e5ce353a446a',
@@ -107,7 +107,7 @@ test('deve ser possível de obter o id do autor', () => {
 
 test('deve ser possível de obter o conteúdo do post', () => {
   const p = Post.create(post.authorId, post.body, post.attachments)
-  expect((p.body as PostBody).getValue()).toStrictEqual(post.body)
+  expect((p.body as Body).getValue()).toStrictEqual(post.body)
 })
 
 test('deve ser possível mudar a visibilidade do post', () => {
