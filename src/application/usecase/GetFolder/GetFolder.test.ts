@@ -3,7 +3,7 @@ import GetFolder from '../GetFolder'
 import {
   createFolder,
   folderRepository,
-} from '../../../common/__test__/GenUserForTest'
+} from '../../../common/__test__/TestHelpers'
 
 let getFolder: GetFolder
 

@@ -1,7 +1,7 @@
 import { expect, test, beforeEach } from 'vitest'
 import SignUp from '../SignUp'
 import GetUser from '../GetUser'
-import { userRepository } from '../../../common/__test__/GenUserForTest'
+import { userRepository } from '../../../common/__test__/TestHelpers'
 import { randomUUID } from 'crypto'
 
 let signUp: SignUp

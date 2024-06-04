@@ -3,7 +3,7 @@ import GetPost from '../GetPost'
 import {
   publishPost,
   postRepository,
-} from '../../../common/__test__/GenUserForTest'
+} from '../../../common/__test__/TestHelpers'
 
 let getPost: GetPost
 

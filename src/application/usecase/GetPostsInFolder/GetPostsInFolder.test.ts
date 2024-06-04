@@ -4,7 +4,7 @@ import {
   savePostInFolder,
   folderRepository,
   postRepository,
-} from '../../../common/__test__/GenUserForTest'
+} from '../../../common/__test__/TestHelpers'
 import Id from '../../../domain/Id'
 
 let getPostsInFolder: GetPostsInFolder

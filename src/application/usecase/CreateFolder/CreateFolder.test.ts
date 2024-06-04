@@ -4,7 +4,7 @@ import {
   signUp,
   userRepository,
   folderRepository,
-} from '../../../common/__test__/GenUserForTest'
+} from '../../../common/__test__/TestHelpers'
 
 let createFolder: CreateFolder
 

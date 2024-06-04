@@ -1,6 +1,6 @@
 import { expect, test, beforeEach } from 'vitest'
 import GetUser from '../GetUser'
-import { signUp, userRepository } from '../../../common/__test__/GenUserForTest'
+import { signUp, userRepository } from '../../../common/__test__/TestHelpers'
 
 let getUser: GetUser
 

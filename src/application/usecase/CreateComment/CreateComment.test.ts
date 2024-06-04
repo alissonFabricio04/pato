@@ -7,7 +7,7 @@ import {
   userRepository,
   postRepository,
   commentRepository
-} from '../../../common/__test__/GenUserForTest'
+} from '../../../common/__test__/TestHelpers'
 import GetComment from '../GetComment'
 
 let createComment: CreateComment

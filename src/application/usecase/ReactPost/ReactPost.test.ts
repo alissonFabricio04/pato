@@ -7,7 +7,7 @@ import {
   postRepository,
   userRepository,
   reactPostRepository,
-} from '../../../common/__test__/GenUserForTest'
+} from '../../../common/__test__/TestHelpers'
 import GetPost from '../GetPost'
 import { randomUUID } from 'crypto'
 

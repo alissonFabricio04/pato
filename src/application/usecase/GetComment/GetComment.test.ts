@@ -3,7 +3,7 @@ import GetComment from '../GetComment'
 import {
   publishComment,
   commentRepository
-} from '../../../common/__test__/GenUserForTest'
+} from '../../../common/__test__/TestHelpers'
 
 let getComment: GetComment
 

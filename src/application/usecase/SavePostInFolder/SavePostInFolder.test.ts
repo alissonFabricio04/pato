@@ -6,7 +6,7 @@ import {
   folderRepository,
   postRepository,
   userRepository,
-} from '../../../common/__test__/GenUserForTest'
+} from '../../../common/__test__/TestHelpers'
 import GetPostsInFolder from '../GetPostsInFolder'
 
 let savePostInFolder: SavePostInFolder
