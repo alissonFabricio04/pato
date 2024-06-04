@@ -5,16 +5,19 @@ import UserRepositoryDatabase from '../../infra/repository/UserRepository/Databa
 import PostRepositoryDatabase from '../../infra/repository/PostRepository/Database'
 import FolderRepositoryDatabase from '../../infra/repository/FolderRepository/Database'
 import ReactPostRepositoryDatabase from '../../infra/repository/ReactPostRepository/Database'
+import CommentRepositoryDatabase from '../../infra/repository/CommentRepository/Database'
 import UnitOfWorkDatabase from '../../infra/repository/UnitOfWork/Database'
 import JwtAdapterImpl from '../../infra/adapter/JwtAdapterImpl'
 import PublishPost from '../../application/usecase/PublishPost'
 import CreateFolder from '../../application/usecase/CreateFolder'
 import SavePostInFolder from '../../application/usecase/SavePostInFolder'
 import { connectionDatabase } from '../../infra/database/Connection'
+import CreateComment from '../../application/usecase/CreateComment'
 
 export const userRepository = new UserRepositoryDatabase(connectionDatabase)
 export const postRepository = new PostRepositoryDatabase(connectionDatabase)
 export const folderRepository = new FolderRepositoryDatabase(connectionDatabase)
+export const commentRepository = new CommentRepositoryDatabase(connectionDatabase)
 export const reactPostRepository = new ReactPostRepositoryDatabase(
   connectionDatabase,
 )
@@ -99,6 +102,28 @@ export async function savePostInFolder() {
   await usecase.handle(input)
   return {
     ...folder,
+    ...post,
+    ...input,
+  }
+}
+
+export async function publishComment() {
+  const usecase = new CreateComment(
+    commentRepository,
+    postRepository,
+    userRepository,
+  )
+  const user = await signUp()
+  const post = await publishPost()
+  const input = {
+    authorId: user.userId,
+    postId: post.postId,
+    comment: 'meu sonho de consumo eh um RUF SCR e um Porsche Singer DLS'
+  }
+  const comment = await usecase.handle(input)
+  return {
+    ...comment,
+    ...user,
     ...post,
     ...input,
   }
