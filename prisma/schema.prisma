@@ -19,6 +19,7 @@ model User {
   Post      Post[]
   ReactPost ReactPost[]
   Folder    Folder[]
+  Comment   Comment[]
 
   @@map("users")
 }
@@ -39,6 +40,7 @@ model Post {
   Post_attachments Post_attachments[]
   ReactPost        ReactPost[]
   SavedPosts       SavedPosts[]
+  Comment          Comment[]
 
   @@map("posts")
 }
@@ -93,4 +95,19 @@ model SavedPosts {
   Post   Post   @relation(fields: [fk_post_id], references: [id])
 
   @@map("saved_posts")
+}
+
+model Comment {
+  id           String  @id @default(uuid())
+  fk_author_id String
+  fk_post_id   String
+  parent_id    String?
+  comment      String
+
+  Parent  Comment?  @relation("CommentToComment", fields: [parent_id], references: [id])
+  Replies Comment[] @relation("CommentToComment")
+  User    User      @relation(fields: [fk_author_id], references: [id])
+  Post    Post      @relation(fields: [fk_post_id], references: [id])
+
+  @@map("comment")
 }
