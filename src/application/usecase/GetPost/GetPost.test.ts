@@ -17,7 +17,7 @@ test('não deve ser possível se buscar um post que não existe', async () => {
   ).rejects.toThrow('Conteúdo não encontrado')
 })
 
-test('deve ser possível buscar um usuário', async () => {
+test('deve ser possível buscar um post', async () => {
   const { postId } = await publishPost()
 
   const outputGetPost = await getPost.handle({ postId })
